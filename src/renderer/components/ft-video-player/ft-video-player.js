@@ -51,7 +51,7 @@ export default Vue.extend({
       type: Array,
       default: null
     },
-    captionList: {
+    captionHybridList: {
       type: Array,
       default: () => { return [] }
     },
@@ -145,16 +145,6 @@ export default Vue.extend({
       return this.$store.getters.getAutoplayVideos
     }
   },
-  watch: {
-    sourceList: function () {
-      this.determineFormatType()
-    },
-    captionList: function () {
-      this.player.caption({
-        data: this.captionList
-      })
-    }
-  },
   mounted: function () {
     this.id = this._uid
 
@@ -196,6 +186,7 @@ export default Vue.extend({
 
         this.player = videojs(videoPlayer, {
           html5: {
+            preloadTextTracks: false,
             vhs: {
               limitRenditionByPlayerDimensions: false,
               smoothQualityChange: false,
@@ -240,12 +231,16 @@ export default Vue.extend({
         this.player.controlBar.getChild('volumePanel').on('mousewheel', this.mouseScrollVolume)
 
         this.player.on('fullscreenchange', this.fullscreenOverlay)
+        this.player.on('fullscreenchange', this.toggleFullscreenClass)
 
         const v = this
 
         this.player.on('ready', function () {
           v.$emit('ready')
           v.checkAspectRatio()
+          if (v.captionHybridList.length !== 0) {
+            v.transformAndInsertCaptions()
+          }
         })
 
         this.player.on('ended', function () {
@@ -657,8 +652,11 @@ export default Vue.extend({
           v.toggleFullWindow()
         },
         createControlTextEl: function (button) {
-          return $(button).html($('<div id="fullwindow" class="vjs-icon-fullwindow-enter vjs-button"></div>')
-            .attr('title', 'Fullwindow'))
+          // Add class name to button to be able to target it with CSS selector
+          return $(button)
+            .addClass('vjs-button-fullwindow')
+            .html($('<div id="fullwindow" class="vjs-icon-fullwindow-enter vjs-button"></div>')
+              .attr('title', 'Full Window'))
         }
       })
       videojs.registerComponent('fullWindowButton', fullWindowButton)
@@ -714,6 +712,26 @@ export default Vue.extend({
       videojs.registerComponent('dashQualitySelector', dashQualitySelector)
       this.player.controlBar.addChild('dashQualitySelector', {}, this.player.controlBar.children_.length - 1)
       this.determineDefaultQualityDash()
+    },
+
+    transformAndInsertCaptions: async function() {
+      let captionList
+      if (this.captionHybridList[0] instanceof Promise) {
+        captionList = await Promise.all(this.captionHybridList)
+        this.$emit('store-caption-list', captionList)
+      } else {
+        captionList = this.captionHybridList
+      }
+
+      for (const caption of captionList) {
+        this.player.addRemoteTextTrack({
+          kind: 'subtitles',
+          src: caption.baseUrl || caption.url,
+          srclang: caption.languageCode,
+          label: caption.label || caption.name.simpleText,
+          type: caption.type
+        }, true)
+      }
     },
 
     toggleFullWindow: function() {
@@ -804,6 +822,14 @@ export default Vue.extend({
             }]
           })
         })
+      }
+    },
+
+    toggleFullscreenClass: function () {
+      if (this.player.isFullscreen()) {
+        $('body').addClass('vjs--full-screen-enabled')
+      } else {
+        $('body').removeClass('vjs--full-screen-enabled')
       }
     },
 
