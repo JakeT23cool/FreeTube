@@ -69,6 +69,7 @@ export default Vue.extend({
       activeSourceList: [],
       videoSourceList: [],
       audioSourceList: [],
+      adaptiveFormats: [],
       captionHybridList: [], // [] -> Promise[] -> string[] (URIs)
       recommendedVideos: [],
       downloadLinks: [],
@@ -311,7 +312,7 @@ export default Vue.extend({
             }
           }
 
-          if (this.isLive && !this.isUpcoming) {
+          if ((this.isLive || this.isLiveContent) && !this.isUpcoming) {
             this.enableLegacyFormat()
 
             this.videoSourceList = result.formats.filter((format) => {
@@ -359,8 +360,15 @@ export default Vue.extend({
           } else {
             this.videoLengthSeconds = parseInt(result.videoDetails.lengthSeconds)
             if (result.player_response.streamingData !== undefined) {
-              this.videoSourceList = result.player_response.streamingData.formats.reverse()
-              this.downloadLinks = result.formats.map((format) => {
+              if (typeof (result.player_response.streamingData.formats) !== 'undefined') {
+                this.videoSourceList = result.player_response.streamingData.formats.reverse()
+              } else {
+                this.videoSourceList = result.player_response.streamingData.adaptiveFormats.reverse()
+              }
+              this.adaptiveFormats = this.videoSourceList
+              this.downloadLinks = result.formats.filter((format) => {
+                return typeof format.mimeType !== 'undefined'
+              }).map((format) => {
                 const qualityLabel = format.qualityLabel || format.bitrate
                 const itag = format.itag
                 const fps = format.fps ? (format.fps + 'fps') : 'kbps'
@@ -388,7 +396,7 @@ export default Vue.extend({
                   .captionTracks
 
               if (typeof captionTracks !== 'undefined') {
-                const locale = localStorage.getItem('locale')
+                const locale = this.$i18n.locale
                 if (locale !== null) {
                   const standardLocale = locale.replace('_', '-')
                   const noLocaleCaption = !captionTracks.some(track =>
@@ -428,7 +436,9 @@ export default Vue.extend({
               if (this.proxyVideos) {
                 this.dashSrc = await this.createInvidiousDashManifest()
               } else {
-                this.dashSrc = await this.createLocalDashManifest(result.player_response.streamingData.adaptiveFormats)
+                const adaptiveFormats = result.player_response.streamingData.adaptiveFormats
+                this.dashSrc = await this.createLocalDashManifest(adaptiveFormats)
+                this.adaptiveFormats = adaptiveFormats
               }
 
               this.audioSourceList = result.player_response.streamingData.adaptiveFormats.filter((format) => {
@@ -867,52 +877,57 @@ export default Vue.extend({
     },
 
     handleVideoEnded: function () {
-      const nextVideoInterval = this.defaultInterval
-      if (this.watchingPlaylist) {
-        this.playNextTimeout = setTimeout(() => {
-          const player = this.$refs.videoPlayer.player
-          if (player !== null && player.paused()) {
-            this.$refs.watchVideoPlaylist.playNextVideo()
-          }
-        }, nextVideoInterval * 1000)
+      if (!this.watchingPlaylist && !this.playNextVideo) {
+        return
+      }
 
-        this.showToast({
-          message: this.$tc('Playing Next Video Interval', nextVideoInterval, { nextVideoInterval: nextVideoInterval }),
-          time: (nextVideoInterval * 1000) + 500,
-          action: () => {
-            clearTimeout(this.playNextTimeout)
-            this.showToast({
-              message: this.$t('Canceled next video autoplay')
-            })
-          }
-        })
-      } else if (this.playNextVideo) {
-        this.playNextTimeout = setTimeout(() => {
-          const player = this.$refs.videoPlayer.player
-          if (player !== null && player.paused()) {
+      const nextVideoInterval = this.defaultInterval
+      this.playNextTimeout = setTimeout(() => {
+        const player = this.$refs.videoPlayer.player
+        if (player !== null && player.paused()) {
+          if (this.watchingPlaylist) {
+            this.$refs.watchVideoPlaylist.playNextVideo()
+          } else {
             const nextVideoId = this.recommendedVideos[0].videoId
-            this.$router.push(
-              {
-                path: `/watch/${nextVideoId}`
-              }
-            )
+            this.$router.push({
+              path: `/watch/${nextVideoId}`
+            })
             this.showToast({
               message: this.$t('Playing Next Video')
             })
           }
-        }, 5000)
+        }
+      }, nextVideoInterval * 1000)
+
+      let countDownTimeLeftInSecond = nextVideoInterval
+      const showCountDownMessage = () => {
+        // Will not display "Playing next video in no time" as it's too late to cancel
+        // Also there is a separate message when playing next video
+        if (countDownTimeLeftInSecond <= 0) {
+          clearInterval(countDownIntervalId)
+          return
+        }
 
         this.showToast({
-          message: this.$t('Playing next video in 5 seconds.  Click to cancel'),
-          time: 5500,
+          message: this.$tc('Playing Next Video Interval', countDownTimeLeftInSecond, { nextVideoInterval: countDownTimeLeftInSecond }),
+          // To avoid message flashing
+          // `time` is manually tested to be 700
+          time: 700,
           action: () => {
             clearTimeout(this.playNextTimeout)
+            clearInterval(countDownIntervalId)
             this.showToast({
               message: this.$t('Canceled next video autoplay')
             })
           }
         })
+
+        // At least this var should be updated AFTER showing the message
+        countDownTimeLeftInSecond = countDownTimeLeftInSecond - 1
       }
+      // Execute once before scheduling it
+      showCountDownMessage()
+      const countDownIntervalId = setInterval(showCountDownMessage, 1000)
     },
 
     handleRouteChange: function () {

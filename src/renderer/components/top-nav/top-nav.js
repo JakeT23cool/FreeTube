@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { mapActions } from 'vuex'
 import FtInput from '../ft-input/ft-input.vue'
 import FtSearchFilters from '../ft-search-filters/ft-search-filters.vue'
 import FtProfileSelector from '../ft-profile-selector/ft-profile-selector.vue'
@@ -49,6 +50,18 @@ export default Vue.extend({
 
     backendPreference: function () {
       return this.$store.getters.getBackendPreference
+    },
+
+    forwardText: function () {
+      return this.$t('Forward')
+    },
+
+    backwardText: function () {
+      return this.$t('Backward')
+    },
+
+    newWindowText: function () {
+      return this.$t('Open New Window')
     }
   },
   mounted: function () {
@@ -124,7 +137,7 @@ export default Vue.extend({
           case 'hashtag': {
             // TODO: Implement a hashtag related view
             let message = 'Hashtags have not yet been implemented, try again later'
-            if (this.$te(message) && this.$t(message) !== '') {
+            if (this.$t(message) && this.$t(message) !== '') {
               message = this.$t(message)
             }
 
@@ -243,6 +256,10 @@ export default Vue.extend({
 
     createNewWindow: function () {
       ipcRenderer.send('createNewWindow')
-    }
+    },
+
+    ...mapActions([
+      'showToast'
+    ])
   }
 })

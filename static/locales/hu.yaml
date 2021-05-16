@@ -135,6 +135,7 @@ Settings:
         #! List countries
     View all Invidious instance information: Az Invidious példány összes tájékoztatásának
       megtekintése
+    System Default: Rendszer alapértelmezett
   Theme Settings:
     Theme Settings: 'Téma beállítások'
     Match Top Bar with Main Color: 'Illessze a felső sávot a fő színnel'
@@ -197,6 +198,7 @@ Settings:
       4k: '4k'
       8k: '8k'
     Playlist Next Video Interval: Lejátszási lista következő videó intervalluma
+    Next Video Interval: Következő videó időköze
   Privacy Settings:
     Privacy Settings: 'Adatvédelmi beállítások'
     Remember History: 'Előzmények megjegyzése'
@@ -682,3 +684,4 @@ Hashtags have not yet been implemented, try again later: A kettőskeresztescímk
   nincs megvalósítva. Próbálkozzon később.
 Unknown YouTube url type, cannot be opened in app: Ismeretlen YouTube URL-típusa,
   nem nyitható meg az alkalmazásban
+Open New Window: Új ablak megnyitása

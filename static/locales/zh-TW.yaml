@@ -116,6 +116,7 @@ Settings:
     Check for Latest Blog Posts: 檢查最新的部落格貼文
     Check for Updates: 檢查更新
     View all Invidious instance information: 檢視所有 Invidious 站台的資訊
+    System Default: 系統預設值
   Theme Settings:
     Theme Settings: '主題設定'
     Match Top Bar with Main Color: '頂部功能表欄對應主色彩'
@@ -177,6 +178,7 @@ Settings:
       4k: '4k'
       8k: '8k'
     Playlist Next Video Interval: 播放清單 下一個影片間隔時間
+    Next Video Interval: 下一個影片區段
   Subscription Settings:
     Subscription Settings: '訂閱設定'
     Hide Videos on Watch: '觀看時隱藏影片'
@@ -605,3 +607,4 @@ Playing Next Video Interval: 馬上播放下一個影片。點擊取消。| 播�
 More: 更多
 Hashtags have not yet been implemented, try again later: 尚未實作主題標籤，請稍後再試
 Unknown YouTube url type, cannot be opened in app: 未知的 YouTube url 類型，無法在應用程式開啟
+Open New Window: 開啟新視窗

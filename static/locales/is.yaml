@@ -137,6 +137,7 @@ Settings:
     View all Invidious instance information: 'Skoða allar upplýsingar um Invidious-tilvik'
     Region for Trending: 'Landssvæði sem skal miða vinsældir við'
         #! List countries
+    System Default: Sjálfgefið í kerfinu
   Theme Settings:
     Theme Settings: 'Þemastillingar'
     Match Top Bar with Main Color: 'Láta toppstiku samsvara aðallit'
@@ -198,6 +199,7 @@ Settings:
       1440p: '1440p'
       4k: '4k'
       8k: '8k'
+    Next Video Interval: Bil í næsta myndskeið
   Privacy Settings:
     Privacy Settings: 'Stillingar gagnaleyndar'
     Remember History: 'Muna vinnsluferil'
@@ -445,7 +447,7 @@ Video:
     Low: 'Lág'
     Medium: 'Miðlungs'
     High: 'Há'
-    Best: 'Best'
+    Best: 'Besta'
   Published:
     Jan: 'Jan'
     Feb: 'Feb'
@@ -620,3 +622,8 @@ Canceled next video autoplay: 'Hætti við sjálfvirka afspilun næsta myndskei�
 
 Yes: 'Já'
 No: 'Nei'
+Hashtags have not yet been implemented, try again later: Ekki er ennþá stuðningur
+  við myllumerki (hashtags), prófaðu aftur síðar
+Unknown YouTube url type, cannot be opened in app: Óþekkt gerð YouTube-slóðar, er
+  ekki hægt að opna í forritinu
+Open New Window: Opna í nýjum glugga

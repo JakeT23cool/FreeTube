@@ -122,6 +122,7 @@ Settings:
     Check for Latest Blog Posts: تحقق من أحدث منشورات المدونة
     Check for Updates: تحقّق من وجود تحديثات
     View all Invidious instance information: عرض جميع نماذج Invidious
+    System Default: افتراضي النظام
   Theme Settings:
     Theme Settings: 'إعدادات السِمة'
     Match Top Bar with Main Color: 'طابق الشريط العلوي مع اللون الأساسي'
@@ -183,6 +184,7 @@ Settings:
       4k: '4k'
       8k: '‍8k'
     Playlist Next Video Interval: الفاصل الزمني لتشغيل الفيديو التالي في قائمة التشغيل
+    Next Video Interval: الفاصل الزمني للفيديو التالي
   Privacy Settings:
     Privacy Settings: 'إعدادات الخصوصية'
     Remember History: 'تذّكر سجلّ المشاهدة'
@@ -655,3 +657,8 @@ This video is unavailable because of missing formats. This can happen due to cou
 More: المزيد
 Playing Next Video Interval: سيتم تشغيل الفيديو التالي على الفور.| إضغط للإلغاء.|
   سيبدأ الفيديو التالي في {nextVideoInterval} ثانية.| إضغط للإلغاء.
+Hashtags have not yet been implemented, try again later: لم يتم تنفيذ علامات التصنيف
+  بعد، حاول مرة أخرى لاحقا
+Unknown YouTube url type, cannot be opened in app: نوع URL غير معروف على YouTube،
+  لا يمكن فتحه في التطبيق
+Open New Window: افتح نافذة جديدة

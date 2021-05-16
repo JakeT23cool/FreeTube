@@ -129,6 +129,7 @@ Settings:
     Check for Updates: Vérifier les mises à jour
     View all Invidious instance information: Voir les informations de toutes les instances
       Invidious
+    System Default: Valeur par défaut du système
   Theme Settings:
     Theme Settings: 'Paramètres du thème'
     Match Top Bar with Main Color: 'Faire correspondre la barre supérieure à la couleur
@@ -193,6 +194,7 @@ Settings:
       8k: '8k'
     Playlist Next Video Interval: Intervalle de la prochaine vidéo dans la liste de
       lecture
+    Next Video Interval: Intervalle vidéo suivante
   Subscription Settings:
     Subscription Settings: 'Paramètres des abonnements'
     Hide Videos on Watch: 'Masquer les vidéos visionnées'
@@ -710,3 +712,4 @@ Hashtags have not yet been implemented, try again later: Les hashtags n'ont pas 
   été implémentés, réessayez plus tard
 Unknown YouTube url type, cannot be opened in app: Type d’url YouTube inconnu, ne
   peut pas être ouvert dans l’application
+Open New Window: Ouvrir une nouvelle fenêtre

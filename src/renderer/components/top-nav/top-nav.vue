@@ -17,6 +17,7 @@
         icon="arrow-left"
         role="button"
         tabindex="0"
+        :title="forwardText"
         @click="historyBack"
         @keypress="historyBack"
       />
@@ -25,6 +26,7 @@
         icon="arrow-right"
         role="button"
         tabindex="0"
+        :title="forwardText"
         @click="historyForward"
         @keypress="historyForward"
       />
@@ -39,6 +41,7 @@
       <font-awesome-icon
         class="navNewWindowIcon navIcon"
         icon="clone"
+        :title="newWindowText"
         @click="createNewWindow"
       />
       <div class="logo">
